@@ -13,18 +13,18 @@ import (
 	scanscli "github.com/tacheshun/krank/internal"
 )
 
-//WHAT THE HELL DOES THE GOLINT WHAT FROM MY LIFE ...
+//WHAT THE HELL DOES THE GOLINT WANT FROM MY LIFE ...
 const (
 	TIMES = 5
 )
 
 // Service provides scans fetching operations.
 type Service interface {
-	// FetchScans fetch all scans from external repository.
+	// FetchScans fetches all scans from external repository.
 	FetchScans() ([]scanscli.Scan, error)
 	// FetchByID filter all scans and get only the scan that match with given id.
 	FetchByID(id int) (scanscli.Scan, error)
-	RunBasicScan()
+	RunBasicScan() (*nmap.Run, []string, error)
 }
 
 type service struct {
@@ -32,7 +32,7 @@ type service struct {
 }
 
 // NewService creates an adding service with the necessary dependencies.
-func NewService(r scanscli.ScanRepo) Service {
+func NewService(r scanscli.ScanRepo) *service {
 	return &service{r}
 }
 
@@ -71,7 +71,7 @@ func (s *service) FetchByID(id int) (scanscli.Scan, error) {
 }
 
 // RunBasicScan scans given target hosts for open ports.
-func (s *service) RunBasicScan() {
+func (s *service) RunBasicScan() (result *nmap.Run, warnings []string, err error){
 
 	ctx, cancel := context.WithTimeout(context.Background(), TIMES*time.Minute)
 	defer cancel()
@@ -87,7 +87,7 @@ func (s *service) RunBasicScan() {
 		log.Fatalf("unable to create nmap scanner: %v", err)
 	}
 
-	result, _, err := scanner.Run()
+	result, _, err = scanner.Run()
 	if err != nil {
 		log.Fatalf("unable to run nmap scan: %v", err)
 	}
@@ -106,6 +106,8 @@ func (s *service) RunBasicScan() {
 	}
 
 	fmt.Printf("Nmap done: %d hosts up scanned in %.2f seconds\n", len(result.Hosts), result.Stats.Finished.Elapsed)
+	// Return result, optional warnings but no error
+	return result, warnings, nil
 }
 
 func numOfRoutines(numOfScans, scansPerRouting int) int {
