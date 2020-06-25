@@ -1,4 +1,4 @@
-//Package errors.
+//Package errors ...
 package errors
 
 import (

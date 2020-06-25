@@ -1,4 +1,4 @@
-# Krank scanner
+# Krank nmap scanner
 
 [![GitHub Release](https://img.shields.io/github/v/release/tacheshun/krank)](https://github.com/tacheshun/krank/releases)
 [![go.dev](https://img.shields.io/badge/go.dev-reference-blue.svg)](https://pkg.go.dev/github.com/tacheshun/krank)

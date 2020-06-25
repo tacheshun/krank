@@ -1,4 +1,4 @@
-//Package cli.
+//Package cli ...
 package cli
 
 import (

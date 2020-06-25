@@ -1,4 +1,4 @@
-//Package storage.
+//Package storage ...
 package storage
 
 import (
@@ -41,7 +41,10 @@ func (s *scanRepo) GetScans() (scans []scanscli.Scan, err error) {
 		return nil, errors.WrapDataUnreacheable(err, "can't parsing response into scans data")
 	}
 
-	defer response.Body.Close()
+	err = response.Body.Close()
+	if err != nil {
+		return nil, errors.WrapDataUnreacheable(err, "can't close response body")
+	}
 
 	return
 }
