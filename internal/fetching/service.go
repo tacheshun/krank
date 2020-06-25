@@ -1,3 +1,4 @@
+//Package fetching ...
 package fetching
 
 import (
@@ -10,6 +11,10 @@ import (
 
 	"github.com/Ullaakut/nmap"
 	scanscli "github.com/tacheshun/krank/internal"
+)
+
+const (
+	TIMES = 5
 )
 
 // Service provides scans fetching operations.
@@ -48,7 +53,6 @@ func (s *service) FetchByID(id int) (scanscli.Scan, error) {
 
 	var b scanscli.Scan
 
-
 	for i := 0; i < numRoutines; i++ {
 		go func(id, begin, end int, scans []scanscli.Scan, b *scanscli.Scan, wg *sync.WaitGroup) {
 			for i := begin; i <= end; i++ {
@@ -66,14 +70,15 @@ func (s *service) FetchByID(id int) (scanscli.Scan, error) {
 }
 
 // RunBasicScan scans given target hosts for open ports.
-func(s *service) RunBasicScan()  {
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
+func (s *service) RunBasicScan() {
+
+	ctx, cancel := context.WithTimeout(context.Background(), TIMES*time.Minute)
 	defer cancel()
 
 	// Equivalent to `/usr/local/bin/nmap -p 80,443,843 google.com facebook.com youtube.com`,
 	// with a 5 minute timeout.
 	scanner, err := nmap.NewScanner(
-		nmap.WithTargets("google.com", "facebook.com", "youtube.com"),
+		nmap.WithTargets("0.0.0.0"),
 		nmap.WithPorts("80,443,843"),
 		nmap.WithContext(ctx),
 	)
