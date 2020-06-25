@@ -34,7 +34,6 @@ linters:
     - dogsled
     - dupl
     - funlen
-    - gochecknoglobals
     - gochecknoinits
     - gocognit
     - goconst
@@ -65,7 +64,6 @@ linters:
     - unconvert
     - unparam
     - whitespace
-    - wsl
 
 issues:
   # enable issues excluded by default 
