@@ -1,12 +1,21 @@
 // Application which greets you.
 package main
 
-import "fmt"
+import (
+	"flag"
+	"github.com/spf13/cobra"
+	scanscli "github.com/tacheshun/krank/internal"
+	"github.com/tacheshun/krank/internal/cli"
+	"github.com/tacheshun/krank/internal/storage"
+)
 
 func main() {
-	fmt.Println(greet())
-}
+	var repo scanscli.ScanRepo
+	flag.Parse()
 
-func greet() string {
-	return "Hi!"
+	repo = storage.NewScanRepository()
+
+	rootCmd := &cobra.Command{Use: "scans-cli"}
+	rootCmd.AddCommand(cli.InitScansCommand(repo))
+	rootCmd.Execute()
 }
