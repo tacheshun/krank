@@ -60,10 +60,7 @@ linters:
     - rowserrcheck
     - scopelint
     - stylecheck
-    # - testpackage
-    - unconvert
-    - unparam
-    - whitespace
+
 
 issues:
   # enable issues excluded by default 
