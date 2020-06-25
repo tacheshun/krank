@@ -13,6 +13,7 @@ import (
 	scanscli "github.com/tacheshun/krank/internal"
 )
 
+//WHAT THE HELL DOES THE GOLINT WHAT FROM MY LIFE ...
 const (
 	TIMES = 5
 )
