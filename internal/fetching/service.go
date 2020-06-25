@@ -4,11 +4,12 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"math"
+	"sync"
 	"time"
 
-	scanscli "github.com/tacheshun/krank/internal"
-	"github.com/pkg/errors"
 	"github.com/Ullaakut/nmap"
+	scanscli "github.com/tacheshun/krank/internal"
 )
 
 // Service provides scans fetching operations.
@@ -17,10 +18,16 @@ type Service interface {
 	FetchScans() ([]scanscli.Scan, error)
 	// FetchByID filter all scans and get only the scan that match with given id.
 	FetchByID(id int) (scanscli.Scan, error)
+	RunBasicScan()
 }
 
 type service struct {
 	sR scanscli.ScanRepo
+}
+
+// NewService creates an adding service with the necessary dependencies.
+func NewService(r scanscli.ScanRepo) Service {
+	return &service{r}
 }
 
 func (s *service) FetchScans() ([]scanscli.Scan, error) {
@@ -33,22 +40,33 @@ func (s *service) FetchByID(id int) (scanscli.Scan, error) {
 		return scanscli.Scan{}, err
 	}
 
-	for _, scan := range scans {
-		if scan.ScanID == id {
-			return scan, nil
-		}
+	scansPerRoutine := 10
+	numRoutines := numOfRoutines(len(scans), scansPerRoutine)
+
+	wg := &sync.WaitGroup{}
+	wg.Add(numRoutines)
+
+	var b scanscli.Scan
+
+
+	for i := 0; i < numRoutines; i++ {
+		go func(id, begin, end int, scans []scanscli.Scan, b *scanscli.Scan, wg *sync.WaitGroup) {
+			for i := begin; i <= end; i++ {
+				if scans[i].ScanID == id {
+					*b = scans[i]
+				}
+			}
+			wg.Done()
+		}(id, i, i+scansPerRoutine, scans, &b, wg)
 	}
 
-	return scanscli.Scan{}, errors.Errorf("Scan %d not found", id)
-}
+	wg.Wait()
 
-// NewService creates an adding service with the necessary dependencies.
-func NewService(r scanscli.ScanRepo) Service {
-	return &service{r}
+	return b, nil
 }
 
 // RunBasicScan scans given target hosts for open ports.
-func RunBasicScan()  {
+func(s *service) RunBasicScan()  {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
 	defer cancel()
 
@@ -84,3 +102,6 @@ func RunBasicScan()  {
 	fmt.Printf("Nmap done: %d hosts up scanned in %.2f seconds\n", len(result.Hosts), result.Stats.Finished.Elapsed)
 }
 
+func numOfRoutines(numOfScans, scansPerRouting int) int {
+	return int(math.Ceil(float64(numOfScans) / float64(scansPerRouting)))
+}
