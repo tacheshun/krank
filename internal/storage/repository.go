@@ -18,7 +18,7 @@ type scanRepo struct {
 	url string
 }
 
-func NewScanRepository() (scanscli.ScanRepo){
+func NewScanRepository() scanscli.ScanRepo {
 	return &scanRepo{url: rmmURL}
 }
 
@@ -37,5 +37,7 @@ func (s *scanRepo) GetScans() (scans []scanscli.Scan, err error) {
 	if err != nil {
 		return nil, err
 	}
+	defer response.Body.Close()
+
 	return
 }

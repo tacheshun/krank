@@ -17,5 +17,5 @@ func main() {
 
 	rootCmd := &cobra.Command{Use: "scans-cli"}
 	rootCmd.AddCommand(cli.InitScansCommand(repo))
-	rootCmd.Execute()
+	_ = rootCmd.Execute()
 }

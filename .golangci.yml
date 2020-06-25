@@ -70,3 +70,6 @@ linters:
 issues:
   # enable issues excluded by default 
   exclude-use-default: false
+  exclude:
+    # should have a package comment, unless it's in another file for this package (golint)
+    - 'in another file for this package'
