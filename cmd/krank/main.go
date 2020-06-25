@@ -1,4 +1,4 @@
-// Application which greets you.
+// Application which will scan for vulnerabilities on a device.
 package main
 
 import (

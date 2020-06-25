@@ -1,3 +1,4 @@
+//storage internal package .
 package storage
 
 import (
@@ -18,6 +19,7 @@ type scanRepo struct {
 	url string
 }
 
+//NewScansRepository public method constructor .
 func NewScanRepository() scanscli.ScanRepo {
 	return &scanRepo{url: rmmURL}
 }

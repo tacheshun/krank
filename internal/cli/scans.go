@@ -1,3 +1,4 @@
+//cli internal package .
 package cli
 
 import (
@@ -12,6 +13,7 @@ type CobraFn func(cmd *cobra.Command, args []string)
 
 const idFlag = "id"
 
+//initialise Scans Command .
 func InitScansCommand(repository scanscli.ScanRepo) *cobra.Command {
 	scanCmd := &cobra.Command{
 		Use:   "scans",

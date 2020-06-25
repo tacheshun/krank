@@ -1,3 +1,4 @@
+//scan internal package .
 package internal
 
 import "encoding/json"
@@ -11,9 +12,11 @@ type Scan struct {
 	Type      *Scantype   `json:"type"`
 }
 
+//Scantype definition .
 type Scantype int
 
 const (
+	//Unknown Scantype iota .
 	Unknown Scantype = iota
 	BasicScan
 	ServiceDetection
@@ -51,5 +54,3 @@ func (s *Scantype) UnmarshalJSON(b []byte) error {
 type ScanRepo interface {
 	GetScans() ([]Scan, error)
 }
-
-// NewScan initialize struct scan
