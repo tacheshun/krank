@@ -1,4 +1,4 @@
-//scan internal package .
+//Package internal .
 package internal
 
 import "encoding/json"
@@ -18,7 +18,9 @@ type Scantype int
 const (
 	//Unknown Scantype iota .
 	Unknown Scantype = iota
+	//BasicScan Scantype iota .
 	BasicScan
+	//ServiceDetection Scantype iota .
 	ServiceDetection
 )
 

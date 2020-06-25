@@ -1,4 +1,4 @@
-//cli internal package .
+//Package cli.
 package cli
 
 import (
@@ -8,12 +8,12 @@ import (
 	"strconv"
 )
 
-// CobraFn function definion of run cobra command
+// CobraFn function definion of run cobra command.
 type CobraFn func(cmd *cobra.Command, args []string)
 
 const idFlag = "id"
 
-//initialise Scans Command .
+//InitScansCommand public method .
 func InitScansCommand(repository scanscli.ScanRepo) *cobra.Command {
 	scanCmd := &cobra.Command{
 		Use:   "scans",
