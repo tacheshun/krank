@@ -2,7 +2,7 @@
 
 .PHONY: all
 all: ## full build
-all: install generate build fmt lint test mod-tidy build-snapshot
+all: install generate build fmt lint test mod-tidy build-snapshot diff
 
 .PHONY: dev
 dev: ## fast build
@@ -58,6 +58,12 @@ mod-tidy: ## go mod tidy
 .PHONY: build-snapshot
 build-snapshot: ## goreleaser --snapshot --skip-publish --rm-dist
 	goreleaser --snapshot --skip-publish --rm-dist
+
+.PHONY: diff
+diff: ## git diff
+	$(call print-target)
+	git diff --exit-code
+	RES=$$(git status --porcelain) ; if [ -n "$$RES" ]; then echo $$RES && exit 1 ; fi
 
 .PHONY: release
 release: ## goreleaser --rm-dist
