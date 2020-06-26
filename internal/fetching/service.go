@@ -3,11 +3,10 @@ package fetching
 
 import (
 	"context"
+	"github.com/tacheshun/krank/internal/storage"
 	"log"
 	"strconv"
 	"time"
-
-	"github.com/tacheshun/krank/internal/storage"
 
 	"github.com/Ullaakut/nmap"
 
@@ -63,11 +62,11 @@ func (s *service) RunBasicScan(jobID string) (resultMap map[string]string, warni
 		if len(host.Ports) == 0 || len(host.Addresses) == 0 {
 			continue
 		}
+		resultMap["deviceId"] = storage.DeviceID
+		resultMap["jobId"] = jobID
 
 		for _, port := range host.Ports {
-			resultMap["deviceId"] = storage.DeviceID
-			resultMap["jobId"] = jobID
-			resultMap["response"] = strconv.Itoa(int(port.ID)) + port.Protocol + "/" + port.Service.Name + "/" + port.State.String()
+			resultMap["response"] += strconv.Itoa(int(port.ID)) + port.Protocol + " " + port.Service.Name + " " + port.State.String() + "<br />"
 		}
 	}
 
