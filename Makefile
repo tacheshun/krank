@@ -2,7 +2,7 @@
 
 .PHONY: all
 all: ## full build
-all: install generate build fmt lint test mod-tidy build-snapshot diff
+all: install generate build fmt lint test mod-tidy build-snapshot
 
 .PHONY: dev
 dev: ## fast build
