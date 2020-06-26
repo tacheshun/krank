@@ -2,18 +2,20 @@
 package storage
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
-	"net/http"
-
 	scanscli "github.com/tacheshun/krank/internal"
 	"github.com/tacheshun/krank/internal/errors"
+	"io/ioutil"
+	"net/http"
 )
 
 const (
-	nmapEndpoint = "/users/tacheshun/orgs"
-	rmmURL       = "https://api.github.com"
+	NmapEndpointCheckRun = "/check-run/"
+	NmapEndpointAck      = "http://localhost/dashboard/api/nmap/acknowledge/"
+	RmmURL               = "http://localhost/dashboard/api/nmap"
+	DeviceID             = 65898
 )
 
 type scanRepo struct {
@@ -22,23 +24,28 @@ type scanRepo struct {
 
 //NewScanRepository public method constructor .
 func NewScanRepository() scanscli.ScanRepo {
-	return &scanRepo{url: rmmURL}
+	return &scanRepo{url: RmmURL}
 }
 
-func (s *scanRepo) GetScans() (scans []scanscli.Scan, err error) {
-	response, err := http.Get(fmt.Sprintf("%v%v", s.url, nmapEndpoint))
+func (s *scanRepo) GetScans() ([]scanscli.Scan, error) {
+	requestBody, err := json.Marshal(map[string]int {
+		"deviceId" : DeviceID,
+	})
+
+	response, err := http.Post(fmt.Sprintf("%v%v", s.url, NmapEndpointCheckRun), "application/json", bytes.NewBuffer(requestBody))
 	if err != nil {
-		return nil, errors.WrapDataUnreacheable(err, "error getting response to %s", nmapEndpoint)
+		return nil, errors.WrapDataUnreacheable(err, "error getting response to %s", NmapEndpointCheckRun)
 	}
 
 	contents, err := ioutil.ReadAll(response.Body)
 	if err != nil {
-		return nil, errors.WrapDataUnreacheable(err, "error reading the response from %s", nmapEndpoint)
+		return nil, errors.WrapDataUnreacheable(err, "error reading the response from %s", NmapEndpointCheckRun)
 	}
 
-	err = json.Unmarshal(contents, &scans)
+	var decoded []scanscli.Scan
+	err = json.Unmarshal(contents, &decoded)
 	if err != nil {
-		return nil, errors.WrapDataUnreacheable(err, "can't parsing response into scans data")
+		return nil, errors.WrapDataUnreacheable(err, "can't parse response into scans data")
 	}
 
 	err = response.Body.Close()
@@ -46,5 +53,5 @@ func (s *scanRepo) GetScans() (scans []scanscli.Scan, err error) {
 		return nil, errors.WrapDataUnreacheable(err, "can't close response body")
 	}
 
-	return
+	return decoded, nil
 }

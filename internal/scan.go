@@ -5,11 +5,8 @@ import "encoding/json"
 
 // Scan representation into data struct .
 type Scan struct {
-	ScanID int       `json:"id"`
-	Login  string    `json:"login"`
-	NodeID string    `json:"node_id"`
-	URL    string    `json:"url"`
-	Type   *Scantype `json:"type"`
+	Command string `json:"command"`
+	JobID   int    `json:"jobId"`
 }
 
 //Scantype definition .

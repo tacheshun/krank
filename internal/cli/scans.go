@@ -5,14 +5,12 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/spf13/cobra"
+	"github.com/tacheshun/krank/internal/fetching"
+	"github.com/tacheshun/krank/internal/storage"
 	"io/ioutil"
 	"log"
 	"net/http"
-	"strconv"
-
-	"github.com/tacheshun/krank/internal/fetching"
-
-	"github.com/spf13/cobra"
 )
 
 // CobraFn function definion of run cobra command.
@@ -35,23 +33,11 @@ func InitScansCommand(service fetching.Service) *cobra.Command {
 
 func runScansFn(service fetching.Service) CobraFn {
 	return func(cmd *cobra.Command, args []string) {
-		id, _ := cmd.Flags().GetString(idFlag)
-		if id != "" {
-			i, _ := strconv.Atoi(id)
-			scan, err := service.FetchByID(i)
-			if err != nil {
-				log.Fatal(err)
-			}
-
-			fmt.Println(scan)
-			return
-		}
-
-		_, err := service.FetchScans()
+		rmmData, err := service.FetchScans()
 		if err != nil {
 			log.Fatal(err)
 		}
-
+		fmt.Println(rmmData)
 		datas, _, err := service.RunBasicScan()
 		if err != nil {
 			log.Fatal(err)
@@ -60,9 +46,8 @@ func runScansFn(service fetching.Service) CobraFn {
 		if err != nil {
 			panic(err)
 		}
-
 		// HTTP Request to RMM Callback URL here
-		req, err := http.NewRequest("POST", "http://localhost:8000/", bytes.NewBuffer(jsonString))
+		req, err := http.NewRequest("POST", storage.NmapEndpointAck, bytes.NewBuffer(jsonString))
 		if err != nil {
 			panic(err)
 		}
