@@ -62,6 +62,10 @@ func runScansFn(service fetching.Service) CobraFn {
 
 		// HTTP Request to RMM Callback URL here
 		req, err := http.NewRequest("POST", "http://localhost:8000/", bytes.NewBuffer(jsonString))
+		if err != nil {
+			panic(err)
+		}
+
 		req.Header.Set("X-Custom-Header", "fromKrank")
 		req.Header.Set("Content-Type", "application/json")
 
