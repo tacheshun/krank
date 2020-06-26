@@ -2,8 +2,6 @@
 package main
 
 import (
-	"flag"
-
 	"github.com/spf13/cobra"
 
 	scanscli "github.com/tacheshun/krank/internal"
@@ -14,7 +12,6 @@ import (
 
 func main() {
 	var repo scanscli.ScanRepo
-	flag.Parse()
 
 	repo = storage.NewScanRepository()
 	fetchingService := fetching.NewService(repo)

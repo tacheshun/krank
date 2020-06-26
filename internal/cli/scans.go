@@ -11,6 +11,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 // CobraFn function definion of run cobra command.
@@ -37,11 +38,14 @@ func runScansFn(service fetching.Service) CobraFn {
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Println(rmmData)
-		datas, _, err := service.RunBasicScan()
+		var datas map[string]string
+		for i, _:= range rmmData{
+			 datas, _, err = service.RunBasicScan(strconv.Itoa(rmmData[i].JobID))
+		}
 		if err != nil {
 			log.Fatal(err)
 		}
+
 		jsonString, err := json.Marshal(datas)
 		if err != nil {
 			panic(err)
@@ -66,5 +70,6 @@ func runScansFn(service fetching.Service) CobraFn {
 		fmt.Println("response Headers:", resp.Header)
 		body, _ := ioutil.ReadAll(resp.Body)
 		fmt.Println("response Body:", string(body))
+		fmt.Println("request Body:", bytes.NewBuffer(jsonString))
 	}
 }

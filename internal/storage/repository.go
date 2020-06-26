@@ -15,7 +15,7 @@ const (
 	NmapEndpointCheckRun = "/check-run/"
 	NmapEndpointAck      = "http://localhost/dashboard/api/nmap/acknowledge/"
 	RmmURL               = "http://localhost/dashboard/api/nmap"
-	DeviceID             = 65898
+	DeviceID             = "65898"
 )
 
 type scanRepo struct {
@@ -28,7 +28,7 @@ func NewScanRepository() scanscli.ScanRepo {
 }
 
 func (s *scanRepo) GetScans() ([]scanscli.Scan, error) {
-	requestBody, err := json.Marshal(map[string]int {
+	requestBody, err := json.Marshal(map[string]string {
 		"deviceId" : DeviceID,
 	})
 

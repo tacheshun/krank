@@ -3,6 +3,7 @@ package fetching
 
 import (
 	"context"
+	"github.com/tacheshun/krank/internal/storage"
 	"log"
 	"strconv"
 	"time"
@@ -20,7 +21,7 @@ const (
 // Service provides scans fetching operations.
 type Service interface {
 	FetchScans() ([]scanscli.Scan, error)
-	RunBasicScan() (map[string]string, []string, error)
+	RunBasicScan(string) (map[string]string, []string, error)
 }
 
 type service struct {
@@ -37,7 +38,7 @@ func (s *service) FetchScans() ([]scanscli.Scan, error) {
 }
 
 // RunBasicScan scans given target hosts for open ports.
-func (s *service) RunBasicScan() (resultMap map[string]string, warnings []string, err error) {
+func (s *service) RunBasicScan(jobID string) (resultMap map[string]string, warnings []string, err error) {
 
 	ctx, cancel := context.WithTimeout(context.Background(), TIMES*time.Minute)
 	defer cancel()
@@ -63,8 +64,8 @@ func (s *service) RunBasicScan() (resultMap map[string]string, warnings []string
 		}
 
 		for _, port := range host.Ports {
-			resultMap["deviceId"] = "65898"
-			resultMap["jobId"] = "6481263"
+			resultMap["deviceId"] = storage.DeviceID
+			resultMap["jobId"] = jobID
 			resultMap["body"] = strconv.Itoa(int(port.ID)) + port.Protocol + "/" + port.Service.Name + "/" + port.State.String()
 		}
 	}
