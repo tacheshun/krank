@@ -18,15 +18,12 @@ linters:
   enable:
     # default linters:
     - deadcode
-    - errcheck
     - gosimple
     - govet
-    - ineffassign
     - staticcheck
     - structcheck
     - typecheck
     - unused
-    - varcheck
 
 
 issues:
