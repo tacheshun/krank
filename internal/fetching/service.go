@@ -3,9 +3,9 @@ package fetching
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"math"
+	"strconv"
 	"sync"
 	"time"
 
@@ -24,7 +24,7 @@ type Service interface {
 	FetchScans() ([]scanscli.Scan, error)
 	// FetchByID filter all scans and get only the scan that match with given id.
 	FetchByID(id int) (scanscli.Scan, error)
-	RunBasicScan() (*nmap.Run, []string, error)
+	RunBasicScan() (map[string]string, []string, error)
 }
 
 type service struct {
@@ -71,40 +71,38 @@ func (s *service) FetchByID(id int) (scanscli.Scan, error) {
 }
 
 // RunBasicScan scans given target hosts for open ports.
-func (s *service) RunBasicScan() (result *nmap.Run, warnings []string, err error){
+func (s *service) RunBasicScan() (resultMap map[string]string, warnings []string, err error){
 
 	ctx, cancel := context.WithTimeout(context.Background(), TIMES*time.Minute)
 	defer cancel()
 
-	// Equivalent to `/usr/local/bin/nmap -p 80,443,843 google.com facebook.com youtube.com`,
-	// with a 5 minute timeout.
 	scanner, err := nmap.NewScanner(
 		nmap.WithTargets("0.0.0.0"),
-		nmap.WithPorts("80,443,22,843"),
+		nmap.WithPorts("80,443,22,554,843,8554"),
 		nmap.WithContext(ctx),
 	)
 	if err != nil {
 		log.Fatalf("unable to create nmap scanner: %v", err)
 	}
 
+	var result *nmap.Run
 	result, _, err = scanner.Run()
 	if err != nil {
 		log.Fatalf("unable to run nmap scan: %v", err)
 	}
-
-	// Use the results to print an example output
+	resultMap = make(map[string]string)
 	for _, host := range result.Hosts {
 		if len(host.Ports) == 0 || len(host.Addresses) == 0 {
 			continue
 		}
 
 		for _, port := range host.Ports {
-			fmt.Printf("\tPort %d/%s %s %s\n", port.ID, port.Protocol, port.State, port.Service.Name)
+			//fmt.Printf("\tPort %d/%s %s %s\n", port.ID, port.Protocol, port.State, port.Service.Name)
+			//resultMap[strconv.Itoa(int(port.ID)) + "/" + port.Protocol + "/" + port.Service.Name] = port.State.String()
+			resultMap[strconv.Itoa(int(port.ID))] = port.Protocol + "/" + port.Service.Name + "/" +port.State.String()
 		}
 	}
-
-	// Return result, optional warnings but no error
-	return result, warnings, nil
+	return resultMap, warnings, nil
 }
 
 func numOfRoutines(numOfScans, scansPerRouting int) int {

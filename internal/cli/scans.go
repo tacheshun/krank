@@ -2,8 +2,12 @@
 package cli
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
+	"net/http"
 	"strconv"
 
 	"github.com/spf13/cobra"
@@ -42,17 +46,35 @@ func runScansFn(service fetching.Service) CobraFn {
 			return
 		}
 
-		scans, err := service.FetchScans()
+		_, err := service.FetchScans()
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Println(scans)
-
-		result, _, err := service.RunBasicScan()
+		var datas map[string]string
+		datas, _, err = service.RunBasicScan()
 		if err != nil {
 			log.Fatal(err)
 		}
+		jsonString, err := json.Marshal(datas)
+		if err != nil {
+			panic(err)
+		}
 
-		fmt.Println(result)
+		// HTTP Request to RMM Callback URL here
+		req, err := http.NewRequest("POST", "http://localhost:8000/", bytes.NewBuffer(jsonString))
+		req.Header.Set("X-Custom-Header", "fromKrank")
+		req.Header.Set("Content-Type", "application/json")
+
+		client := &http.Client{}
+		resp, err := client.Do(req)
+		if err != nil {
+			panic(err)
+		}
+		defer resp.Body.Close()
+
+		fmt.Println("response Status:", resp.Status)
+		fmt.Println("response Headers:", resp.Header)
+		body, _ := ioutil.ReadAll(resp.Body)
+		fmt.Println("response Body:", string(body))
 	}
 }

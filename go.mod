@@ -4,6 +4,7 @@ go 1.14
 
 require (
 	github.com/Ullaakut/nmap v2.0.0+incompatible
+	github.com/gofrs/uuid v3.3.0+incompatible
 	github.com/golangci/golangci-lint v1.27.0
 	github.com/goreleaser/goreleaser v0.138.0
 	github.com/pkg/errors v0.9.1

@@ -24,6 +24,7 @@ const (
 	ServiceDetection
 )
 
+
 func (s Scantype) String() string {
 	return toString[s]
 }
