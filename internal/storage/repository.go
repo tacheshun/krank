@@ -5,10 +5,11 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	scanscli "github.com/tacheshun/krank/internal"
-	"github.com/tacheshun/krank/internal/errors"
 	"io/ioutil"
 	"net/http"
+
+	scanscli "github.com/tacheshun/krank/internal"
+	"github.com/tacheshun/krank/internal/errors"
 )
 
 const (
@@ -28,8 +29,8 @@ func NewScanRepository() scanscli.ScanRepo {
 }
 
 func (s *scanRepo) GetScans() ([]scanscli.Scan, error) {
-	requestBody, err := json.Marshal(map[string]string {
-		"deviceId" : DeviceID,
+	requestBody, err := json.Marshal(map[string]string{
+		"deviceId": DeviceID,
 	})
 
 	response, err := http.Post(fmt.Sprintf("%v%v", s.url, NmapEndpointCheckRun), "application/json", bytes.NewBuffer(requestBody))

@@ -5,13 +5,15 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/spf13/cobra"
-	"github.com/tacheshun/krank/internal/fetching"
-	"github.com/tacheshun/krank/internal/storage"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"strconv"
+
+	"github.com/spf13/cobra"
+
+	"github.com/tacheshun/krank/internal/fetching"
+	"github.com/tacheshun/krank/internal/storage"
 )
 
 // CobraFn function definion of run cobra command.
@@ -39,8 +41,8 @@ func runScansFn(service fetching.Service) CobraFn {
 			log.Fatal(err)
 		}
 		var datas map[string]string
-		for i, _:= range rmmData{
-			 datas, _, err = service.RunBasicScan(strconv.Itoa(rmmData[i].JobID))
+		for i, _ := range rmmData {
+			datas, _, err = service.RunBasicScan(strconv.Itoa(rmmData[i].JobID))
 		}
 		if err != nil {
 			log.Fatal(err)
