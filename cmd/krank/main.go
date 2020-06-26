@@ -3,6 +3,7 @@ package main
 
 import (
 	"flag"
+
 	"github.com/spf13/cobra"
 	scanscli "github.com/tacheshun/krank/internal"
 	"github.com/tacheshun/krank/internal/cli"
