@@ -17,6 +17,7 @@ import (
 //WHAT THE HELL DOES THE GOLINT WANT FROM MY LIFE ...
 const (
 	TIMES = 5
+	SECONDS = 5000
 )
 
 // Service provides scans fetching operations.
