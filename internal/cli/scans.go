@@ -9,10 +9,9 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"github.com/tacheshun/krank/internal/fetching"
 
 	"github.com/spf13/cobra"
-	
-	"github.com/tacheshun/krank/internal/fetching"
 )
 
 // CobraFn function definion of run cobra command.
