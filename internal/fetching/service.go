@@ -80,7 +80,7 @@ func (s *service) RunBasicScan() (result *nmap.Run, warnings []string, err error
 	// with a 5 minute timeout.
 	scanner, err := nmap.NewScanner(
 		nmap.WithTargets("0.0.0.0"),
-		nmap.WithPorts("80,443,843"),
+		nmap.WithPorts("80,443,22,843"),
 		nmap.WithContext(ctx),
 	)
 	if err != nil {
@@ -98,14 +98,11 @@ func (s *service) RunBasicScan() (result *nmap.Run, warnings []string, err error
 			continue
 		}
 
-		fmt.Printf("Host %q:\n", host.Addresses[0])
-
 		for _, port := range host.Ports {
 			fmt.Printf("\tPort %d/%s %s %s\n", port.ID, port.Protocol, port.State, port.Service.Name)
 		}
 	}
 
-	fmt.Printf("Nmap done: %d hosts up scanned in %.2f seconds\n", len(result.Hosts), result.Stats.Finished.Elapsed)
 	// Return result, optional warnings but no error
 	return result, warnings, nil
 }

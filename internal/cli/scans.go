@@ -47,9 +47,12 @@ func runScansFn(service fetching.Service) CobraFn {
 			log.Fatal(err)
 		}
 		fmt.Println(scans)
-		_, _, err = service.RunBasicScan()
+
+		result, _, err := service.RunBasicScan()
 		if err != nil {
 			log.Fatal(err)
 		}
+
+		fmt.Println(result)
 	}
 }
