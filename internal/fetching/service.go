@@ -71,7 +71,7 @@ func (s *service) FetchByID(id int) (scanscli.Scan, error) {
 }
 
 // RunBasicScan scans given target hosts for open ports.
-func (s *service) RunBasicScan() (resultMap map[string]string, warnings []string, err error){
+func (s *service) RunBasicScan() (resultMap map[string]string, warnings []string, err error) {
 
 	ctx, cancel := context.WithTimeout(context.Background(), TIMES*time.Minute)
 	defer cancel()
@@ -97,9 +97,7 @@ func (s *service) RunBasicScan() (resultMap map[string]string, warnings []string
 		}
 
 		for _, port := range host.Ports {
-			//fmt.Printf("\tPort %d/%s %s %s\n", port.ID, port.Protocol, port.State, port.Service.Name)
-			//resultMap[strconv.Itoa(int(port.ID)) + "/" + port.Protocol + "/" + port.Service.Name] = port.State.String()
-			resultMap[strconv.Itoa(int(port.ID))] = port.Protocol + "/" + port.Service.Name + "/" +port.State.String()
+			resultMap[strconv.Itoa(int(port.ID))] = port.Protocol + "/" + port.Service.Name + "/" + port.State.String()
 		}
 	}
 	return resultMap, warnings, nil

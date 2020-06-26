@@ -5,11 +5,12 @@ import "encoding/json"
 
 // Scan representation into data struct .
 type Scan struct {
-	ScanID      int       `json:"id"`
-	Login       string    `json:"login"`
-	NodeID      string    `json:"node_id"`
-	URL         string    `json:"url"`
-	Type      *Scantype   `json:"type"`
+	ScanID int       `json:"id"`
+	Login  string    `json:"login"`
+	NodeID string    `json:"node_id"`
+	URL    string    `json:"url"`
+	Type   *Scantype `json:"type"`
+
 }
 
 //Scantype definition .
@@ -23,7 +24,6 @@ const (
 	//ServiceDetection Scantype iota .
 	ServiceDetection
 )
-
 
 func (s Scantype) String() string {
 	return toString[s]
@@ -40,7 +40,6 @@ var toID = map[string]Scantype{
 	"ServiceDetection":   ServiceDetection,
 	"unknown":            Unknown,
 }
-
 
 // UnmarshalJSON convert type from json to scanType .
 func (s *Scantype) UnmarshalJSON(b []byte) error {

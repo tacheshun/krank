@@ -4,11 +4,11 @@ package storage
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/tacheshun/krank/internal/errors"
 	"io/ioutil"
 	"net/http"
 
 	scanscli "github.com/tacheshun/krank/internal"
+	"github.com/tacheshun/krank/internal/errors"
 )
 
 const (
