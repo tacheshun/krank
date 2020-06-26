@@ -3,10 +3,11 @@ package fetching
 
 import (
 	"context"
-	"github.com/tacheshun/krank/internal/storage"
 	"log"
 	"strconv"
 	"time"
+
+	"github.com/tacheshun/krank/internal/storage"
 
 	"github.com/Ullaakut/nmap"
 
