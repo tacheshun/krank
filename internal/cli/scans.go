@@ -50,8 +50,8 @@ func runScansFn(service fetching.Service) CobraFn {
 		if err != nil {
 			log.Fatal(err)
 		}
-		var datas map[string]string
-		datas, _, err = service.RunBasicScan()
+
+		datas, _, err := service.RunBasicScan()
 		if err != nil {
 			log.Fatal(err)
 		}
