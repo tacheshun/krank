@@ -2,8 +2,9 @@
 package main
 
 import (
-	"github.com/spf13/cobra"
 	"time"
+
+	"github.com/spf13/cobra"
 
 	scanscli "github.com/tacheshun/krank/internal"
 	"github.com/tacheshun/krank/internal/cli"
