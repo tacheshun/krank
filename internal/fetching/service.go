@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/Ullaakut/nmap"
+
 	scanscli "github.com/tacheshun/krank/internal"
 )
 

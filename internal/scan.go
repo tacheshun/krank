@@ -10,7 +10,6 @@ type Scan struct {
 	NodeID string    `json:"node_id"`
 	URL    string    `json:"url"`
 	Type   *Scantype `json:"type"`
-
 }
 
 //Scantype definition .
@@ -30,15 +29,15 @@ func (s Scantype) String() string {
 }
 
 var toString = map[Scantype]string{
-	BasicScan:         "BasicScan",
-	ServiceDetection:  "ServiceDetection",
-	Unknown:           "unknown",
+	BasicScan:        "BasicScan",
+	ServiceDetection: "ServiceDetection",
+	Unknown:          "unknown",
 }
 
 var toID = map[string]Scantype{
-	"BasicScan":          BasicScan,
-	"ServiceDetection":   ServiceDetection,
-	"unknown":            Unknown,
+	"BasicScan":        BasicScan,
+	"ServiceDetection": ServiceDetection,
+	"unknown":          Unknown,
 }
 
 // UnmarshalJSON convert type from json to scanType .
