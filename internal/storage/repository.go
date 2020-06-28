@@ -46,7 +46,7 @@ func (s *scanRepo) GetScans() ([]scanscli.Scan, error) {
 	var decoded []scanscli.Scan
 	err = json.Unmarshal(contents, &decoded)
 	if err != nil {
-		return nil, errors.WrapDataUnreacheable(err, "can't parse response into scans data")
+		return nil, nil
 	}
 
 	err = response.Body.Close()

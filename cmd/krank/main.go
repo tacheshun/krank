@@ -22,7 +22,6 @@ func main() {
 		rootCmd := &cobra.Command{Use: "scans-cli"}
 		rootCmd.AddCommand(cli.InitScansCommand(fetchingService))
 		_ = rootCmd.Execute()
-		time.Sleep(time.Microsecond * fetching.SECONDS)
+		time.Sleep(time.Minute)
 	}
-
 }

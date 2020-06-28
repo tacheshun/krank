@@ -17,7 +17,6 @@ import (
 //WHAT THE HELL DOES THE GOLINT WANT FROM MY LIFE ...
 const (
 	TIMES   = 5
-	SECONDS = 5000
 )
 
 // Service provides scans fetching operations.
@@ -47,7 +46,7 @@ func (s *service) RunBasicScan(jobID string) (resultMap map[string]string, warni
 
 	scanner, err := nmap.NewScanner(
 		nmap.WithTargets("0.0.0.0"),
-		nmap.WithPorts("80,443,22,554,843,8554"),
+		nmap.WithPorts("80,443,22,554,843,3306,8554"),
 		nmap.WithContext(ctx),
 	)
 	if err != nil {
